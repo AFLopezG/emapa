@@ -14,6 +14,7 @@ class EquipoController extends Controller
     public function index()
     {
         //
+        return Equipo::all();
     }
 
     /**
@@ -30,6 +31,14 @@ class EquipoController extends Controller
     public function store(StoreEquipoRequest $request)
     {
         //
+        $equipo=new Equipo();
+        $equipo->codigo=strtoupper($request->codigo);
+        $equipo->nombre=strtoupper($request->nombre);
+        $equipo->ubicacion=$request->ubicacion;
+        $equipo->adquisicion=$request->adquisicion;
+        $equipo->user_id=$request->user_id;
+        $equipo->save();
+
     }
 
     /**
@@ -54,6 +63,12 @@ class EquipoController extends Controller
     public function update(UpdateEquipoRequest $request, Equipo $equipo)
     {
         //
+        $equipo=Equipo::find($request->id);
+        $equipo->nombre=strtoupper($request->nombre);
+        $equipo->ubicacion=$request->ubicacion;
+        $equipo->adquisicion=$request->adquisicion;
+        $equipo->user_id=$request->user_id;
+        $equipo->save();
     }
 
     /**

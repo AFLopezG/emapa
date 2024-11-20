@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
+use Illuminate\Notifications\Action;
 
 class ActivityController extends Controller
 {
@@ -14,6 +15,7 @@ class ActivityController extends Controller
     public function index()
     {
         //
+        return Activity::with('maquinaria')->with('equipo')->get();
     }
 
     /**
@@ -22,6 +24,7 @@ class ActivityController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -30,6 +33,12 @@ class ActivityController extends Controller
     public function store(StoreActivityRequest $request)
     {
         //
+        $act=new Activity();        
+        $act->nombre=$request->nombre;
+        $act->asociado=$request->asociado;
+        $act->maquinaria_id=$request->maquinaria_id;
+        $act->equipo_id=$request->equipo_id;
+        $act->save();
     }
 
     /**
@@ -54,6 +63,12 @@ class ActivityController extends Controller
     public function update(UpdateActivityRequest $request, Activity $activity)
     {
         //
+        $act=Activity::find($request->id);        
+        $act->nombre=$request->nombre;
+        $act->asociado=$request->asociado;
+        $act->maquinaria_id=$request->maquinaria_id;
+        $act->equipo_id=$request->equipo_id;
+        $act->save();
     }
 
     /**

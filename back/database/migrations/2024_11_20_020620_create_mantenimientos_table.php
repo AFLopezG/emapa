@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->enum('tipo',['PREVENTIVO','CORRECTIVO','PREDICTIVO']);
             $table->string('frecuencia'); //diaria, semanal, mensual, trimestral).
-            $table->date('inicio'); // de inicio del plan.
-            $table->date('proximo'); // Fecha del próximo mantenimiento programado.
+            $table->date('programa'); // de inicio del plan.
             $table->text('descripcion'); // Descripción (TEXT): Descripción detallada del plan de mantenimiento.
-            $table->unsignedBigInteger("equipo_id")->nullable();
-            $table->foreign("equipo_id")->references("id")->on("equipos");
+            $table->unsignedBigInteger("actividad_id")->nullable();
+            $table->foreign("actividad_id")->references("id")->on("activities");
+            // asignacion tecnico
             $table->timestamps();
         });
     }

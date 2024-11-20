@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->string('asociado');
+            $table->unsignedBigInteger("maquinaria_id")->nullable(); // tecnico
+            $table->foreign("maquinaria_id")->references("id")->on("maquinarias");
+            $table->unsignedBigInteger("equipo_id")->nullable(); // tecnico
+            $table->foreign("equipo_id")->references("id")->on("equipos");       
+            
             $table->timestamps();
         });
     }
