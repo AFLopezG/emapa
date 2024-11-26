@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('serie')->unique();
             $table->text('descripcion');
+            $table->string('tipo')->nullable();
             $table->integer('cantidad')->default(0);
             $table->integer('minimo')->default(0);
             $table->string('ubicacion')->nullable();

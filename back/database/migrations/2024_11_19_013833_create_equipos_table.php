@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('codigo')->unique();
             $table->string('nombre');
-            //$table->enum('tipo',['ELECTRICO','MECANICO']);
+            $table->enum('tipo',['ELECTRICO','MECANICO']);
             $table->string('ubicacion');
             $table->date('adquisicion');
             $table->string('estado')->default('OPERATIVO');

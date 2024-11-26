@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('mantenimientos', function (Blueprint $table) {
             $table->id();
             $table->enum('tipo',['PREVENTIVO','CORRECTIVO','PREDICTIVO']);
-            $table->string('frecuencia'); //diaria, semanal, mensual, trimestral).
             $table->date('programa'); // de inicio del plan.
             $table->text('descripcion'); // Descripción (TEXT): Descripción detallada del plan de mantenimiento.
             $table->unsignedBigInteger("actividad_id")->nullable();
