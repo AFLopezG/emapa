@@ -124,13 +124,13 @@
             if(this.actividad.id==undefined){
                 this.$api.post('actividad',this.actividad).then(res =>{
                     this.dialogReg=false
-                    this.getMaq()
+                    this.getAct()
                 })
             }
             else{
                 this.$api.put('actividad/'+this.actividad.id,this.actividad).then(res =>{
                     this.dialogReg=false
-                    this.getMaq()
+                    this.getAct()
                 })
             }
         }
