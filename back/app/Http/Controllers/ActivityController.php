@@ -37,7 +37,10 @@ class ActivityController extends Controller
         $act->nombre= strtoupper($request->nombre);
         $act->asociado=strtoupper($request->asociado);
         $act->tipo=$request->tipo;
+        $act->frecuencia=$request->frecuencia;
+        $act->dias=$request->dias;
         $act->equipo_id=$request->equipo_id;
+        $act->maquinaria_id=$request->maquinaria_id;
         $act->save();
     }
 
@@ -67,6 +70,8 @@ class ActivityController extends Controller
         $act->nombre=$request->nombre;
         $act->asociado=$request->asociado;
         $act->tipo=$request->tipo;
+        $act->frecuencia=$request->frecuencia;
+        $act->dias=$request->dias;
         $act->maquinaria_id=$request->maquinaria_id;
         $act->equipo_id=$request->equipo_id;
         $act->save();

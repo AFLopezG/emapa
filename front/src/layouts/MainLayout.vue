@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          <q-badge class="text-white ">Sistema Mantenimeinto</q-badge>
+          <q-badge class="text-white ">Sistema Mantenimiento</q-badge>
         </q-toolbar-title>
         <div>
 

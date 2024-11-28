@@ -13,9 +13,8 @@ class Equipo extends Model
     'nombre',
     'ubicacion',
     'adquisicion',
-    'tipo',
     'estado',
-    "user_id"
+    'operador'
 ];
 
 public function user(){

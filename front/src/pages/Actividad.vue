@@ -1,6 +1,6 @@
 <template>
     <q-page padding>
-    <q-table title="Listado de Equipos" :rows="listado" :columns="columns" row-key="name" >
+    <q-table title="Listado Actividad Equipo" :rows="listado" :columns="columns" row-key="name" >
         <template v-slot:top-right>
              <q-btn color="green" dense label="Registrar" @click="dialogReg=true"/>
             
@@ -13,30 +13,30 @@
 
           <template v-slot:body-cell-op="props">
             <q-td keys="op" :props="props">
-                 <q-btn flat color="yellow" icon="edit" dense @click="modificar(props.row)" v-if="props.row.estado!='FUERA DE SERVICIO'"/>                
+                 <q-btn flat color="yellow" icon="edit" dense @click="modificar(props.row)" />                
             </q-td>
           </template>
     </q-table>
     <q-dialog v-model="dialogReg">
     <q-card>
     <q-card-section>
-    <div class="text-h6" v-if="equipo.id==undefined">Registrar Equipo</div>
+    <div class="text-h6" v-if="actividad.id==undefined">Registrar Equipo</div>
     <div class="text-h6" v-else>Modificar Equipo</div>
     </q-card-section>
     <q-form @submit="onSubmit"  class="q-gutter-md" >
     <q-card-section>
     <div class="row">
-        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.codigo" label="Codigo" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
-        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.nombre" label="Nombre Equip" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
-        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.ubicacion" label="Ubicacion" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
-        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.adquisicion" label="Fec Adquisicion" type="date" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
-        <div class="col-12 q-pa-xs" v-if="equipo.id!=undefined"><q-select outlined dense v-model="equipo.estado" label="Estado" :options="['OPERATIVO','EN MANTENIMIENTO','FUERA DE SERVICIO']" /></div>
-        <div class="col-12 q-pa-xs"><q-select outlined dense v-model="user" :options="usuarios" label="Responsable" /></div>
+        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="actividad.nombre" label="Nombre Act" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
+        <div class="col-12 q-pa-xs"><q-select outlined dense v-model="actividad.tipo" :options="['ELECTRICO','MECANICO']" label="Tipo" :rules="[ val => val && val.length > 0 || 'Dato requerido']"/></div>
+        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="actividad.asociado" label="Asociado" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
+        <div class="col-12 q-pa-xs"><q-select outlined dense v-model="fr" :options="frec" label="Frecuencia" /></div>
+        <div class="col-12 q-pa-xs"><q-select outlined dense v-model="equipo" :options="equipos" label="EQUIPO" option-label="nombre"/></div>
+        <div class="col-12 q-pa-xs"><q-select outlined dense v-model="maq" :options="maquinarias" label="MAQUINARIA" option-label="nombre"/></div>
     </div>
     
    </q-card-section>
     <q-card-actions align="right">
-    <q-btn label="REGISTRAR" type="submit" color="green" v-if="equipo.id==undefined" flat/>
+    <q-btn label="REGISTRAR" type="submit" color="green" v-if="actividad.id==undefined" flat/>
     <q-btn label="MODIFICAR" type="submit" color="yellow" v-else flat/>
     <q-btn flat label="CANCELAR" color="red" v-close-popup />
     </q-card-actions>
@@ -55,33 +55,49 @@
         dialogReg:false,
         maquinarias:[],
         equipos:[],
-        equipo:{},
-        maq:{},
+        equipo:{nombre:''},
+        maq:{nombre:''},
         filter:'',
         listado:[],
         actividad:{},
+        frec:[
+            {label:'SEMANAL',dias:7},
+            {label:'MENSUAL',dias:30},
+            {label:'TRIMESTRAL',dias:90},
+            {label:'SEMESTRAL',dias:180},
+            {label:'ANUAL',dias:365},
+        ],
+        fr:{label:'SEMANAL',dias:7},
         columns:[
             {label:'OP',name:'op',field:'op'},
-            {label:'CODIGO',name:'codigo',field:'codigo'},
             {label:'NOMBRE',name:'nombre',field:'nombre'},
+            {label:'ASOCIADO',name:'asociado',field:'asociado'},
             {label:'TIPO',name:'tipo',field:'tipo'},
-            {label:'UBICACION',name:'ubicacion',field:'ubicacion'},
-            {label:'Fec Adq',name:'adquisicion',field:'adquisicion'},
-            {label:'Resp',name:'user',field:row=>row.user.nombre+' '+row.user.apellido},
+            {label:'frecuencia',name:'frecuencia',field:'frecuencia'},
+            {label:'Equipo.',name:'user',field:row=>row.equipo.nombre},
+            {label:'Maq.',name:'user',field:row=>row.maquinaria.nombre},
         ]
     }
   },
   created() {
-        this.getMaq()
+        this.getAct()
         this.getEq()
-        this.getEquip()
+        this.getMaq()
     },
     methods: {
         modificar(r){
+
             this.actividad=r
+            this.fr={label:this.actividad.frecuencia,dias:this.actividad.dias}
             this.equipo=r.equipo
             this.maq=r.maquinaria
             this.dialogReg=true
+        },
+        getAct(){
+            this.$api.get('actividad').then(res =>{
+                console.log(res.data)
+                this.listado=res.data
+            })
         },
         getEq(){
             this.$api.get('listEq').then(res =>{
@@ -102,15 +118,17 @@
 
             this.actividad.equipo_id=this.equipo.id
             this.actividad.maquinaria_id=this.maq.id
+            this.actividad.frecuencia=this.fr.label
+            this.actividad.dias=this.fr.dias
 
-            if(this.equipo.id==undefined){
-                this.$api.post('equipo',this.equipo).then(res =>{
+            if(this.actividad.id==undefined){
+                this.$api.post('actividad',this.actividad).then(res =>{
                     this.dialogReg=false
                     this.getMaq()
                 })
             }
             else{
-                this.$api.put('equipo/'+this.equipo.id,this.equipo).then(res =>{
+                this.$api.put('actividad/'+this.actividad.id,this.actividad).then(res =>{
                     this.dialogReg=false
                     this.getMaq()
                 })

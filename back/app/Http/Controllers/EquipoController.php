@@ -40,7 +40,7 @@ class EquipoController extends Controller
         $equipo->nombre=strtoupper($request->nombre);
         $equipo->ubicacion=$request->ubicacion;
         $equipo->adquisicion=$request->adquisicion;
-        $equipo->user_id=$request->user_id;
+        $equipo->operador=strtoupper($request->operador);
         $equipo->save();
 
     }
@@ -72,7 +72,7 @@ class EquipoController extends Controller
         $equipo->ubicacion=$request->ubicacion;
         $equipo->adquisicion=$request->adquisicion;
         $equipo->estado=$request->estado;
-        $equipo->user_id=$request->user_id;
+        $equipo->operador=strtoupper($request->operador);
         $equipo->save();
     }
 

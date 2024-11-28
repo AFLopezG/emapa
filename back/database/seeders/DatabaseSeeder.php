@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             UserSeeder::class,
-            PermisoSeeder::class
+            PermisoSeeder::class,
+            MaquinariaSeeder::class,
+            EquipoSeeder::class
         ]);
     }
 }

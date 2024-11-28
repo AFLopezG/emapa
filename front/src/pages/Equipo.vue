@@ -31,7 +31,7 @@
         <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.ubicacion" label="Ubicacion" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
         <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.adquisicion" label="Fec Adquisicion" type="date" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
         <div class="col-12 q-pa-xs" v-if="equipo.id!=undefined"><q-select outlined dense v-model="equipo.estado" label="Estado" :options="['OPERATIVO','EN MANTENIMIENTO','FUERA DE SERVICIO']" /></div>
-        <div class="col-12 q-pa-xs"><q-select outlined dense v-model="user" :options="usuarios" label="Responsable" /></div>
+        <div class="col-12 q-pa-xs"><q-input outlined dense v-model="equipo.operador" label="Operador Resp" lazy-rules :rules="[ val => val && val.length > 0 || 'Dato requerido']" /></div>
     </div>
     
 
@@ -54,9 +54,7 @@
     name:'maquinariaPage',
   data() {
     return {
-        user:{label:''},
         dialogReg:false,
-        usuarios:[],
         filter:'',
         equipo:{},
         listado:[],
@@ -64,34 +62,21 @@
             {label:'OP',name:'op',field:'op'},
             {label:'CODIGO',name:'codigo',field:'codigo'},
             {label:'NOMBRE',name:'nombre',field:'nombre'},
-            {label:'TIPO',name:'tipo',field:'tipo'},
             {label:'UBICACION',name:'ubicacion',field:'ubicacion'},
             {label:'Fec Adq',name:'adquisicion',field:'adquisicion'},
-            {label:'Resp',name:'user',field:row=>row.user.nombre+' '+row.user.apellido},
+            {label:'Resp',name:'operador',field:'operador'},
         ]
     }
   },
   created() {
-        this.getUser()
         this.getEquip()
     },
     methods: {
         modificar(r){
             this.equipo=r
-            this.user=r.user
-            this.user.label=this.user.nombre+' '+this.user.apellido
             this.dialogReg=true
         },
-        getUser(){
-            this.usuarios=[]
-            this.$api.get('listUser').then(res =>{
-                console.log(res.data)
-                res.data.forEach(r => {
-                    r.label=r.nombre+' '+r.apellido
-                    this.usuarios.push(r)
-                });
-            })
-        },
+
         getEquip(){
             this.$api.get('equipo').then(res =>{
                 this.listado=res.data

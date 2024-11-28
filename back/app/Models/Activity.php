@@ -11,6 +11,7 @@ class Activity extends Model
     protected $fillable = [
         'nombre',
         'asociado',
+        'tipo',
         "maquinaria_id",
         "equipo_id",        
     ];

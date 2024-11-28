@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('ubicacion');
             $table->date('adquisicion');
             $table->string('estado')->default('OPERATIVO');
-            $table->unsignedBigInteger("user_id")->nullable();
-            $table->foreign("user_id")->references("id")->on("users");
+            $table->string('operador');
             $table->timestamps();
         });
     }
