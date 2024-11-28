@@ -17,7 +17,7 @@ class UserController extends Controller
     }
 
     public function listUser(){
-        return User::select()->where('estado','ACTIVO')->where('id','<>',1)->get();
+        return User::where('estado',true)->where('id','<>',1)->get();
     }
     /**
      * Store a newly created resource in storage.

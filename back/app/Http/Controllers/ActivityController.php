@@ -34,9 +34,9 @@ class ActivityController extends Controller
     {
         //
         $act=new Activity();        
-        $act->nombre=$request->nombre;
-        $act->asociado=$request->asociado;
-        $act->maquinaria_id=$request->maquinaria_id;
+        $act->nombre= strtoupper($request->nombre);
+        $act->asociado=strtoupper($request->asociado);
+        $act->tipo=$request->tipo;
         $act->equipo_id=$request->equipo_id;
         $act->save();
     }
@@ -66,6 +66,7 @@ class ActivityController extends Controller
         $act=Activity::find($request->id);        
         $act->nombre=$request->nombre;
         $act->asociado=$request->asociado;
+        $act->tipo=$request->tipo;
         $act->maquinaria_id=$request->maquinaria_id;
         $act->equipo_id=$request->equipo_id;
         $act->save();

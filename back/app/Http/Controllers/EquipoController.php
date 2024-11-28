@@ -14,7 +14,11 @@ class EquipoController extends Controller
     public function index()
     {
         //
-        return Equipo::all();
+        return Equipo::with('user')->get();
+    }
+
+    public function listEq(){
+        return Equipo::where('estado','<>','FUERA DE SERVICIO')->get();
     }
 
     /**
@@ -67,6 +71,7 @@ class EquipoController extends Controller
         $equipo->nombre=strtoupper($request->nombre);
         $equipo->ubicacion=$request->ubicacion;
         $equipo->adquisicion=$request->adquisicion;
+        $equipo->estado=$request->estado;
         $equipo->user_id=$request->user_id;
         $equipo->save();
     }

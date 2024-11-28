@@ -8,14 +8,15 @@
           round
           icon="menu"
           aria-label="Menu"
-          @click="toggleLeftDrawer"
+          @click="leftDrawerOpen=!leftDrawerOpen"
         />
 
         <q-toolbar-title>
-          Quasar App
+          <q-badge class="text-white ">Sistema Mantenimeinto</q-badge>
         </q-toolbar-title>
+        <div>
 
-        <div>Quasar v{{ $q.version }}</div>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -23,19 +24,22 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
+      :width="250"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+    <q-list bordered class="rounded-borders">
+      <q-item-label header class="text-center text-bold">
+        Opciones
+      </q-item-label>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
+      <q-item clickable dense to="/" exact active-class="bg-primary text-white">
+        <q-item-section avatar><q-icon name="home" /></q-item-section>
+        <q-item-section><q-item-label>Principal</q-item-label><q-item-label caption class="text-grey">Pagina principal</q-item-label></q-item-section>
+    </q-item>
+      <q-expansion-item dense exact expand-separator icon="people" label="Usuarios" to="/usuarios" expand-icon="null" />
+      <q-expansion-item dense exact expand-separator icon="precision_manufacturing" label="Sistema Maquinaria" to="/maquinaria" expand-icon="null" />
+      <q-expansion-item dense exact expand-separator icon="factory" label="Equipos" to="/equipo" expand-icon="null" />
+      <q-expansion-item dense exact expand-separator icon="checklist" label="Actividad" to="/actividad" expand-icon="null" />
+      
       </q-list>
     </q-drawer>
 
@@ -45,62 +49,23 @@
   </q-layout>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script >
+import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
-defineOptions({
-  name: 'MainLayout'
+export default defineComponent({
+  name: 'MainLayout',
+  data () {
+    return {
+      leftDrawerOpen: ref(false),
+    }
+  },
+  created () {
+  },
+  methods: {
+    toggleLeftDrawer () {
+      this.leftDrawerOpen = !this.leftDrawerOpen
+    }
+  },
 })
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
 </script>

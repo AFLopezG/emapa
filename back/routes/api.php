@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::resource('maquinaria',App\Http\Controllers\MaquinariaController::class);
 Route::resource('equipo',App\Http\Controllers\EquipoController::class);
 Route::resource('actividad',App\Http\Controllers\ActivityController::class);
+Route::get('listUser',[App\Http\Controllers\UserController::class,'listUser']);
+Route::get('listEq',[App\Http\Controllers\EquipoController::class,'listEq']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

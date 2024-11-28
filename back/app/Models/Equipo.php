@@ -13,8 +13,13 @@ class Equipo extends Model
     'nombre',
     'ubicacion',
     'adquisicion',
+    'tipo',
     'estado',
     "user_id"
 ];
+
+public function user(){
+    return $this->belongsTo(User::class);
+}
 
 }
