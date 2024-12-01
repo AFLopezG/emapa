@@ -11,7 +11,7 @@ class StoreTrabajoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

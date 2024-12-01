@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Equipo;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use Illuminate\Notifications\Action;
@@ -18,6 +19,10 @@ class ActivityController extends Controller
         return Activity::with('maquinaria')->with('equipo')->get();
     }
 
+    public function listReg(){
+        return Equipo::with('actividades')->where('estado','<>','FUERA DE SERVICIO')->get();
+
+    }
     /**
      * Show the form for creating a new resource.
      */

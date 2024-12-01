@@ -7,6 +7,7 @@ const routes = [
       { path: '/maquinaria', component: () => import('pages/Maquinaria.vue') },
       { path: '/equipo', component: () => import('pages/Equipo.vue') },
       { path: '/actividad', component: () => import('pages/Actividad.vue') },
+      { path: '/cronograma', component: () => import('pages/Cronograma.vue') },
     ]
   },
 

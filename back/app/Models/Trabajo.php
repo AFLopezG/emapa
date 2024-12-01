@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Trabajo extends Model
 {
     use HasFactory;
+
+    public function actividad(){
+        return $this->belongsTo(Activity::class)->with('equipo');
+    }
 }

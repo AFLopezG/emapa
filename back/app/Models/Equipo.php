@@ -17,8 +17,12 @@ class Equipo extends Model
     'operador'
 ];
 
-public function user(){
-    return $this->belongsTo(User::class);
-}
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function actividades(){
+        return $this->hasMany(Activity::class);
+    }
 
 }
