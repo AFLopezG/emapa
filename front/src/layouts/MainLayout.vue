@@ -39,7 +39,7 @@
       <q-expansion-item dense exact expand-separator icon="precision_manufacturing" label="Sistema Maquinaria" to="/maquinaria" expand-icon="null" />
       <q-expansion-item dense exact expand-separator icon="factory" label="Equipos" to="/equipo" expand-icon="null" />
       <q-expansion-item dense exact expand-separator icon="checklist" label="Actividad" to="/actividad" expand-icon="null" />
-      <q-expansion-item dense exact expand-separator icon="today" label="Planificacion" to="/actividad" expand-icon="null" />
+      <q-expansion-item dense exact expand-separator icon="today" label="Planificacion" to="/cronograma" expand-icon="null" />
       
       </q-list>
     </q-drawer>
