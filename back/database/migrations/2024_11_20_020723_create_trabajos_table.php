@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('estado',['ABIERTA','EN PROCESO','FINALIZADA']);
             $table->unsignedBigInteger("actividad_id");
             $table->foreign("actividad_id")->references("id")->on("activities"); 
-            $table->unsignedBigInteger("user_id"); // tecnico
+            $table->unsignedBigInteger("user_id")->nullable(); // tecnico
             $table->foreign("user_id")->references("id")->on("users");
             $table->timestamps();
         });

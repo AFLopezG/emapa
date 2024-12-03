@@ -19,6 +19,7 @@ Route::resource('equipo',App\Http\Controllers\EquipoController::class);
 Route::resource('actividad',App\Http\Controllers\ActivityController::class);
 Route::resource('trabajo',App\Http\Controllers\TrabajoController::class);
 Route::resource('mantenimiento',App\Http\Controllers\MantenimientoController::class);
+Route::resource('inventario',App\Http\Controllers\InventarioController::class);
 Route::get('listUser',[App\Http\Controllers\UserController::class,'listUser']);
 Route::get('listEq',[App\Http\Controllers\EquipoController::class,'listEq']);
 Route::get('listCrono',[App\Http\Controllers\TrabajoController::class,'listCrono']);

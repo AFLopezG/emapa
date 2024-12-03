@@ -14,6 +14,7 @@ class InventarioController extends Controller
     public function index()
     {
         //
+        return Inventario::all();
     }
 
     /**
@@ -30,6 +31,14 @@ class InventarioController extends Controller
     public function store(StoreInventarioRequest $request)
     {
         //
+        $inventario=new Inventario();
+        $inventario->nombre=strtoupper($request->nombre);
+        $inventario->serie=$request->serie;
+        $inventario->descripcion=$request->descripcion;
+        $inventario->tipo=strtoupper($request->tipo);
+        $inventario->minimo=$request->minimo;
+        $inventario->ubicacion=$request->ubicacion;
+        $inventario->save();
     }
 
     /**
@@ -54,6 +63,13 @@ class InventarioController extends Controller
     public function update(UpdateInventarioRequest $request, Inventario $inventario)
     {
         //
+        $inventario=Inventario::find($request->id);
+        $inventario->nombre=strtoupper($request->nombre);
+        $inventario->descripcion=$request->descripcion;
+        $inventario->tipo=strtoupper($request->tipo);
+        $inventario->minimo=$request->minimo;
+        $inventario->ubicacion=$request->ubicacion;
+        $inventario->save();
     }
 
     /**
