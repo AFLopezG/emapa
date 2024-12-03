@@ -83,9 +83,9 @@
             })
         },
         onSubmit(){
-            if(this.user.id==undefined)
+            /*if(this.user.id==undefined)
                 return false
-            this.equipo.user_id=this.user.id
+            this.equipo.user_id=this.user.id*/
 
             if(this.equipo.id==undefined){
                 this.$api.post('equipo',this.equipo).then(res =>{
