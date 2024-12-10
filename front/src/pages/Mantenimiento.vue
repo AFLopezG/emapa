@@ -2,7 +2,7 @@
     <q-page padding>
         <div class="row">
             <div class="col-6 q-pa-xs"><q-input dense outlined v-model="fecha" label="Fecha" type="date"/></div>
-            <div class="col-6 q-pa-xs"> <q-btn color="info"  icon="search" />   </div>
+            <div class="col-6 q-pa-xs"> <q-btn color="info"  icon="search" @click="getplan"/>   </div>
         </div>
         <q-table title="Mantenimiento Programado" :rows="listado" :columns="columns" row-key="name" >
             <template v-slot:body-cell-op="props">
@@ -18,9 +18,12 @@
                 </q-card-section>
                 <q-card-section>
                     <div class="row">
-                        <div class="col-6"><q-select square outlined v-model="model" :options="['OPERATIVO','PENDIENTE DE REPARACION','REQUIERE REVISION']" label="Condicion" /></div>
-                        <div class="col-6 q-pa-xs"><q-input  outlined v-model="text" label="duracion" /></div>
-                        <div class="col-6 q-pa-xs"><q-input  outlined v-model="text" label="detalle" /></div>
+                        <div class="col-6"><q-select square outlined v-model="registro.condicion" :options="['OPERATIVO','PENDIENTE DE REPARACION','REQUIERE REVISION']" label="Condicion" /></div>
+                        <div class="col-6 q-pa-xs"><q-input  outlined v-model="registro.duracion" label="duracion" type="number"/></div>
+                        <div class="col-6 q-pa-xs"><q-input  outlined v-model="registro.detalle" label="detalle" /></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12"><q-select square outlined v-model="material" :options="inventario" label="Material" option-label="nombre"/></div>
                     </div>
                 </q-card-section>
                 <q-card-actions align="right">
@@ -38,6 +41,9 @@ export default {
     data() {
         return {
             dialogReg:false,
+            material:{nombre:''},
+            registro:{},
+            inventario:[],
             dato:{},
             listado:[],
             fecha:moment().format("YYYY-MM-DD"),
@@ -52,8 +58,15 @@ export default {
     },
     created(){
         this.getplan()
+        this.getInv()
     },
     methods:{
+        getInv(){
+            this.$api.get('inventario').then(res =>{
+                console.log(res.data)
+                this.inventario=res.data
+            })
+        },
         getplan(){
             this.$api.get('listPlan/'+this.fecha).then(res=>{
                 console.log(res.data)
