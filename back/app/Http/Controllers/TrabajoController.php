@@ -20,7 +20,10 @@ class TrabajoController extends Controller
 
     public function listCrono(){
         return Trabajo::with('actividad')->whereDate('creacion','>=',date('Y-m-d'))->get();
+    }
 
+    public function listPlan($fecha){
+        return Trabajo::with('actividad')->where('estado','ABIERTA')->whereDate('creacion',$fecha)->get();
     }
 
     /**

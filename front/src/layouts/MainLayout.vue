@@ -40,6 +40,7 @@
       <q-expansion-item dense exact expand-separator icon="factory" label="Equipos" to="/equipo" expand-icon="null" />
       <q-expansion-item dense exact expand-separator icon="checklist" label="Actividad" to="/actividad" expand-icon="null" />
       <q-expansion-item dense exact expand-separator icon="today" label="Planificacion" to="/cronograma" expand-icon="null" />
+      <q-expansion-item dense exact expand-separator icon="assignment" label="Inspeccion" to="/mantenimiento" expand-icon="null" />
       <q-expansion-item dense exact expand-separator icon="store" label="Almacen" to="/almacen" expand-icon="null" />
       
       </q-list>

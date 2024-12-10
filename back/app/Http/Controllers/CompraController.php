@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Compra;
 use App\Http\Requests\StoreCompraRequest;
 use App\Http\Requests\UpdateCompraRequest;
+use App\Models\CompraDetalle;
 
 class CompraController extends Controller
 {
@@ -30,6 +31,20 @@ class CompraController extends Controller
     public function store(StoreCompraRequest $request)
     {
         //
+        $compra= new Compra();
+        $compra->fecha=date('Y-m-d');
+        $compra->user_id=$request->user()->id;
+        $compra->save();
+
+        foreach ($request->detalle as $value) {
+            # code...
+            $compradetalle=new CompraDetalle();
+            $compradetalle->cantidad=$value['cantidad'];
+            $compradetalle->compra_id=$compra->id;
+            $compradetalle->inventario_id=$value['inventario_id'];
+            $compradetalle->save();
+        }        
+
     }
 
     /**

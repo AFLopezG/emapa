@@ -122,23 +122,23 @@ import Equipo from "./Equipo.vue";
     },
     methods:{
         onSubmit(){
-            console.log(this.equipo.id==undefined || this.actividad.id==undefined)
+            //console.log(this.equipo.id==undefined || this.actividad.id==undefined)
             if(this.equipo.id==undefined || this.actividad.id==undefined)
                 return false
 
             this.trabajo.actividad_id=this.actividad.id
 
             this.$api.post('trabajo',this.trabajo).then(res=>{
+                this.getTrabajo()
                 this.trabajo={'creacion':moment().format("YYYY-MM-DD")}
                 this.dialogReg=false
-                this.getTrabajo
             })
 
         },
         onMod(){
             this.$api.put('trabajo/'+this.trabajo2.id,this.trabajo2).then(res=>{
                 this.dialogMod=false
-                this.getTrabajo
+                this.getTrabajo()
             })
         },
         cargar(){

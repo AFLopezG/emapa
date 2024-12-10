@@ -16,8 +16,7 @@ return new class extends Migration
             $table->enum('tipo',['PREVENTIVO','CORRECTIVO','PREDICTIVO']);
             $table->date('programa'); // de inicio del plan.
             $table->text('descripcion'); // Descripción (TEXT): Descripción detallada del plan de mantenimiento.
-            $table->unsignedBigInteger("actividad_id")->nullable();
-            $table->foreign("actividad_id")->references("id")->on("activities");
+
             // asignacion tecnico
             $table->timestamps();
         });

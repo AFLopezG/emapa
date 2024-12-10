@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('cantidad');
             $table->unsignedBigInteger("inventario_id")->nullable();
             $table->foreign("inventario_id")->references("id")->on("inventarios");
+            $table->unsignedBigInteger("compra_id")->nullable();
+            $table->foreign("compra_id")->references("id")->on("compras");
          
             $table->timestamps();
         });

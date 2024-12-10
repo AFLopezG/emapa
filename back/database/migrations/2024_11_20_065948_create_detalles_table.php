@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('detalles', function (Blueprint $table) {
             $table->id();
             $table->integer('cantidad');
-            $table->unsignedBigInteger("cumplimiento_id")->nullable();
-            $table->foreign("cumplimiento_id")->references("id")->on("cumplimientos");
+            $table->unsignedBigInteger("trabajo_id")->nullable();
+            $table->foreign("trabajo_id")->references("id")->on("trabajos");
        
             $table->unsignedBigInteger("inventario_id")->nullable();
             $table->foreign("inventario_id")->references("id")->on("inventarios");
