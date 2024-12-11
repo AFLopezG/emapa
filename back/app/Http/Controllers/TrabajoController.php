@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTrabajoRequest;
 use App\Http\Requests\UpdateTrabajoRequest;
 use App\Models\Activity;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class TrabajoController extends Controller
 {
@@ -86,6 +87,19 @@ class TrabajoController extends Controller
         $trabajo->descripcion = $request->descripcion;
         $trabajo->tipo = $request->tipo;
         $trabajo->save();
+    }
+
+    public function regRevision(Request $request){
+        $trabajo=Trabajo::find($request->id);
+        $trabajo->ejecuacion=date('Y-m-d');
+        $trabajo->detalle=$request->detalle;
+
+        $trabajo->estado='EN PROCESO';
+        if(sizeof( $request->detalles)>0)
+            $trabajo->aprobacion='SOLICITUD';
+        $trabajo->string('condicion')->nullable();
+        $trabajo->duracion=$request->duracion;
+        //$trabajo->user_id=$request->user()->id;
     }
 
     /**
