@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('trabajos', function (Blueprint $table) {
             $table->id();
             $table->date('creacion');
-            $table->date('ejecuacion')->nullable();
-            //$table->string('tipo')->nullable();
+            $table->date('ejecucion')->nullable();
+            $table->string('tipo')->nullable();
             $table->text('descripcion')->nullable();
             $table->text('detalle')->nullable();
             $table->enum('estado',['ABIERTA','EN PROCESO','FINALIZADA']);

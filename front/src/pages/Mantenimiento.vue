@@ -7,7 +7,7 @@
         <q-table title="Mantenimiento Programado" :rows="listado" :columns="columns" row-key="name" >
             <template v-slot:body-cell-op="props">
                 <q-td keys="op" :props="props">
-                     <q-btn flat color="acent" icon="checklist" dense @click="dato=props.row; dialogReg=true" />                
+                     <q-btn flat color="acent" icon="checklist" dense @click="dato=props.row; dialogReg=true" v-if="props.row.estado=='ABIERTA'"/>                
                 </q-td>
               </template>
         </q-table>
@@ -18,9 +18,9 @@
                 </q-card-section>
                 <q-card-section>
                     <div class="row">
-                        <div class="col-6 q-pa-xs"><q-select dense outlined v-model="registro.condicion" :options="['OPERATIVO','PENDIENTE DE REPARACION','REQUIERE REVISION']" label="Condicion" /></div>
-                        <div class="col-6 q-pa-xs"><q-input dense outlined v-model="registro.duracion" label="duracion" type="number"/></div>
-                        <div class="col-12 q-pa-xs"><q-input dense outlined v-model="registro.detalle" label="detalle" /></div>
+                        <div class="col-6 q-pa-xs"><q-select dense outlined v-model="dato.condicion" :options="['OPERATIVO','PENDIENTE DE REPARACION','REQUIERE REVISION']" label="Condicion" /></div>
+                        <div class="col-6 q-pa-xs"><q-input dense outlined v-model="dato.duracion" label="duracion" type="number"/></div>
+                        <div class="col-12 q-pa-xs"><q-input dense outlined v-model="dato.detalle" label="detalle" /></div>
                     </div>
                     <div class="row">
                         <div class="col-12 q-pa-xs"><q-select  dense outlined v-model="material" :options="inventario" label="Material"  @filter="filterFn" use-input input-debounce="0"/></div>
@@ -40,7 +40,8 @@
                     </div>
                 </q-card-section>
                 <q-card-actions align="right">
-                    <q-btn flat label="OK" color="primary" v-close-popup />
+                    <q-btn flat label="Cancelar" color="red" v-close-popup />
+                    <q-btn flat label="Registrar" color="green" @click="registrar" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -53,6 +54,7 @@ export default {
     name:'MantPage',
     data() {
         return {
+            cantidad:1,
             dialogReg:false,
             material:{label:''},
             registro:{},
@@ -67,6 +69,7 @@ export default {
                 {name:'actividad',label:'actividad',field:row=>row.actividad.nombre},
                 {name:'equipo',label:'equipo',field:row=>row.actividad.equipo.nombre},
                 {name:'tipo',label:'tipo',field:'tipo'},
+                {name:'estado',label:'estado',field:'estado'},
                 {name:'descripcion',label:'descripcion',field:'descripcion'},
             ],
             colList:[
@@ -81,9 +84,25 @@ export default {
         this.getInv()
     },
     methods:{
+        registrar(){
+            this.dato.detalles=this.detalles
+            this.$api.post('regRevision',this.dato).then(res =>{
+                this.dialogReg=false
+                this.detalles={}
+                this.cantidad=1
+                this.getplan()
+            })
+
+        },
         agregar(){
+            let det=this.detalles.find(item => item.id === this.material.id)
+            if(det)
+                {
+                    det.cantidad+=this.cantidad
+                }
+            else{
             this.material.cantidad=this.cantidad
-            this.detalles.push(this.material)
+            this.detalles.push(this.material)}
         },
         eliminar(p){
             console.log(p)
