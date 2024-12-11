@@ -98,9 +98,14 @@ class TrabajoController extends Controller
         $trabajo->ejecucion = date('Y-m-d');
         $trabajo->detalle=$request->detalle;
 
-        $trabajo->estado='EN PROCESO';
-        if($request->condicion!='OPERATIVO')
-            $trabajo->aprobacion='SOLICITUD';
+        if($request->condicion!='OPERATIVO'){
+            $trabajo->estado='EN PROCESO';
+
+            $trabajo->aprobacion='SOLICITUD';}
+        else{
+        $trabajo->estado='FINALIZADA';
+
+        }
         $trabajo->condicion=$request->condicion;
         $trabajo->duracion=$request->duracion;
         //$trabajo->user_id=$request->user()->id;
