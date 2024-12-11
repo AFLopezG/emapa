@@ -7,9 +7,14 @@
         <q-table title="Mantenimiento Programado" :rows="listado" :columns="columns" row-key="name" >
             <template v-slot:body-cell-op="props">
                 <q-td keys="op" :props="props">
-                     <q-btn flat color="acent" icon="checklist" dense @click="dato=props.row; dialogReg=true" v-if="props.row.estado=='ABIERTA'"/>                
+                     <q-btn flat color="acent" icon="checklist" dense @click="dato=props.row; dialogReg=true" v-if="props.row.estado=='ABIERTA'"/>
                 </q-td>
               </template>
+        </q-table>
+        <div class="col-6 q-pa-xs"> <q-btn color="info"  icon="search" @click="getRev"/>   </div>
+
+        <q-table title="Revision Realizada" :rows="listrealizado" :columns="columns2" row-key="name" >
+
         </q-table>
         <q-dialog v-model="dialogReg">
             <q-card style="width: 700px; max-width: 80vw;">
@@ -30,12 +35,12 @@
                             <q-table  :rows="detalles" :columns="colList" row-key="name" dense >
                                 <template v-slot:body-cell-op="props">
                                     <q-td keys="op" :props="props">
-                                         <q-btn flat color="red" icon="delete" dense @click="eliminar(props)" />                
+                                         <q-btn flat color="red" icon="delete" dense @click="eliminar(props)" />
                                     </q-td>
                                   </template>
                             </q-table>
-                            
-                        
+
+
                         </div>
                     </div>
                 </q-card-section>
@@ -45,7 +50,7 @@
                 </q-card-actions>
             </q-card>
         </q-dialog>
-        
+
     </q-page>
 </template>
 <script>
@@ -54,6 +59,7 @@ export default {
     name:'MantPage',
     data() {
         return {
+            listrealizado:[],
             cantidad:1,
             dialogReg:false,
             material:{label:''},
@@ -72,15 +78,25 @@ export default {
                 {name:'estado',label:'estado',field:'estado'},
                 {name:'descripcion',label:'descripcion',field:'descripcion'},
             ],
+            columns2:[
+                {name:'actividad',label:'actividad',field:row=>row.actividad.nombre},
+                {name:'equipo',label:'equipo',field:row=>row.actividad.equipo.nombre},
+                {name:'tipo',label:'tipo',field:'tipo'},
+                {name:'estado',label:'estado',field:'estado'},
+                {name:'descripcion',label:'descripcion',field:'descripcion'},
+            ],
             colList:[
             {name:'op',label:'op',field:'op'},
             {name:'cantidad',label:'cantidad',field:'cantidad'},
             {name:'nombre',label:'nombre',field:'nombre'},
             ]
+
+
         }
     },
     created(){
         this.getplan()
+        this.getRev()
         this.getInv()
     },
     methods:{
@@ -138,6 +154,13 @@ export default {
             this.$api.get('listPlan/'+this.fecha).then(res=>{
                 console.log(res.data)
                 this.listado=res.data
+            })
+
+        },
+        getRev(){
+            this.$api.get('listAvance/'+this.fecha).then(res=>{
+                console.log(res.data)
+                this.listrealizado=res.data
             })
 
         }

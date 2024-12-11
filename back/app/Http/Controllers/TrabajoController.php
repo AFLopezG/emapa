@@ -28,6 +28,9 @@ class TrabajoController extends Controller
         return Trabajo::with('actividad')->where('estado','ABIERTA')->whereDate('creacion',$fecha)->get();
     }
 
+    public function listAvance($fecha){
+        return Trabajo::with('actividad')->where('estado','<>','ABIERTA')->whereDate('creacion',$fecha)->get();
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -46,7 +49,7 @@ class TrabajoController extends Controller
         $fechaActual = new \DateTime($request->creacion); // Fecha inicial
         $finAnio = new \DateTime($fechaActual->format('Y') . '-12-31'); // Fin del año
         $intervalo = new \DateInterval('P' . $actividad->dias . 'D'); // Intervalo de días
-        
+
         while ($fechaActual <= $finAnio) {
             $trabajo = new Trabajo();
             $trabajo->creacion = $fechaActual->format('Y-m-d'); // Convertir la fecha a formato string
@@ -55,7 +58,7 @@ class TrabajoController extends Controller
             $trabajo->estado = 'ABIERTA';
             $trabajo->actividad_id = $request->actividad_id;
             $trabajo->save();
-            
+
             // Sumar los días al objeto DateTime
             $fechaActual->add($intervalo);
         }
@@ -108,7 +111,7 @@ class TrabajoController extends Controller
             # code...
             $detalle=new Detalle();
             $detalle->cantidad=$value['cantidad'];
-            $detalle->trabajo_id=$trabajo->id;       
+            $detalle->trabajo_id=$trabajo->id;
             $detalle->inventario_id=$value['id'];
             $detalle->save();
         }

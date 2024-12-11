@@ -26,6 +26,8 @@ Route::get('listEq',[App\Http\Controllers\EquipoController::class,'listEq']);
 Route::get('listCrono',[App\Http\Controllers\TrabajoController::class,'listCrono']);
 Route::get('listReg',[App\Http\Controllers\ActivityController::class,'listReg']);
 Route::get('listPlan/{fecha}',[App\Http\Controllers\TrabajoController::class,'listPlan']);
+Route::get('listAvance/{fecha}',[App\Http\Controllers\TrabajoController::class,'listAvance']);
+
 Route::post('regRevision',[App\Http\Controllers\TrabajoController::class,'regRevision']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
