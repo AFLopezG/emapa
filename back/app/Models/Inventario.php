@@ -16,6 +16,7 @@ class Inventario extends Model
     'cantidad',
     'minimo',
     'ubicacion',
+    
     ];
 
 }

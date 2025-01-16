@@ -18,7 +18,7 @@
                    <div class="row">
                     <div class="col-6 q-pa-xs"><q-select dense square outlined v-model="equipo" :options="equipos" label="Equipos" option-label="nombre" @update:model-value="cargar"/></div>
                     <div class="col-6 q-pa-xs"><q-select dense square outlined v-model="actividad" :options="actividades" label="Actividad" option-label="nombre" v-if="actividades.length>0"/></div>
-                    <div class="col-6 q-pa-xs"><q-input dense square outlined v-model="trabajo.creacion" type="date" label="Fecha Inicio" v-if="actividades.length>0" required/></div>
+                    <div class="col-6 q-pa-xs"><q-input dense square outlined v-model="trabajo.creacion" type="date" label="Fecha Inicio" v-if="actividades.length>0" v-bind:min="minFecha" required/></div>
                     <div class="col-6 q-pa-xs"><q-select dense square outlined v-model="trabajo.tipo" :options="tipo" label="Tipo" v-if="actividades.length>0" required/></div>
                     <div class="col-12 q-pa-xs"><q-input dense square outlined v-model="trabajo.descripcion" label="Descripcion" v-if="actividades.length>0"/></div>
                    </div>
@@ -75,6 +75,7 @@ import Equipo from "./Equipo.vue";
   },
   data() {
     return {
+        minFecha:moment().format("YYYY-MM-DD"),
         tipo:['PREVENTIVO','CORRECTIVO','PREDICTIVO'],
         dialogReg:false,
         dialogMod:false,
@@ -172,9 +173,13 @@ import Equipo from "./Equipo.vue";
             this.trabajos=[]
                 this.$api.get('listCrono').then(res=>{
                 console.log(res.data)
+                let colorfec=''
                 res.data.forEach(r=>{
                     this.trabajos.push(r)
-                    this.events.push({ title: r.actividad.nombre+' ', start: r.creacion,id:r.id })
+                    if(r.tipo=='CORRECTIVO') colorfec='#fa0000' 
+                    if(r.tipo=='PREVENTIVO') colorfec='#fac100' 
+                    if(r.tipo=='PREDICTIVO') colorfec='00e3fa' 
+                    this.events.push({ title: r.actividad.nombre+' ', start: r.creacion,id:r.id,color:colorfec })
                 })
                 console.log(this.events)
                 this.calendarOptions.events=this.events

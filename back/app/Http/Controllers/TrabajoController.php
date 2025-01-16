@@ -28,8 +28,20 @@ class TrabajoController extends Controller
         return Trabajo::with('actividad')->where('estado','ABIERTA')->whereDate('creacion',$fecha)->get();
     }
 
-    public function listAvance($fecha){
-        return Trabajo::with('actividad')->where('estado','<>','ABIERTA')->whereDate('creacion',$fecha)->get();
+    public function listAvance(Request $request){
+        if($request->tipo=='TODO'){
+        return Trabajo::with('actividad')->where('estado','<>','ABIERTA')
+        ->whereDate('creacion','>=',$request->ini)
+        ->whereDate('creacion','<=',$request->fin)
+        ->get();
+        }
+        else{
+            return Trabajo::with('actividad')->where('estado','<>','ABIERTA')
+            ->where('tipo',$request->tipo)
+            ->whereDate('creacion','>=',$request->ini)
+            ->whereDate('creacion','<=',$request->fin)
+            ->get();
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -50,6 +62,16 @@ class TrabajoController extends Controller
         $finAnio = new \DateTime($fechaActual->format('Y') . '-12-31'); // Fin del año
         $intervalo = new \DateInterval('P' . $actividad->dias . 'D'); // Intervalo de días
 
+        if($request->tipo=='PREVENTIVO' || $request->tipo=='CORRECTIVO'){
+            $trabajo = new Trabajo();
+            $trabajo->creacion = $request->creacion; // Convertir la fecha a formato string
+            $trabajo->descripcion = $request->descripcion;
+            $trabajo->tipo = $request->tipo;
+            $trabajo->estado = 'ABIERTA';
+            $trabajo->actividad_id = $request->actividad_id;
+            $trabajo->save();
+        }
+        else{
         while ($fechaActual <= $finAnio) {
             $trabajo = new Trabajo();
             $trabajo->creacion = $fechaActual->format('Y-m-d'); // Convertir la fecha a formato string
@@ -62,6 +84,7 @@ class TrabajoController extends Controller
             // Sumar los días al objeto DateTime
             $fechaActual->add($intervalo);
         }
+    }
     }
 
     /**

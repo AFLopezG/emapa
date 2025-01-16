@@ -11,6 +11,12 @@
                 </q-td>
               </template>
         </q-table>
+
+        <div class="row">
+            <div class="col-3  q-pa-xs"><q-input square outlined v-model="text" type='date' label="ini" dense /></div>
+            <div class="col-3  q-pa-xs"><q-input square outlined v-model="text" type='date' label="fin" dense /></div>
+            <div class="col-3  q-pa-xs"><q-select square outlined v-model="model" :options="['TODO','PREDICTIVO','PREVENTIVO','CORRECTIVO']" label="tipo" dense/></div>
+        </div>
         <div class="col-6 q-pa-xs"> <q-btn color="info"  icon="search" @click="getRev"/>   </div>
 
         <q-table title="Revision Realizada" :rows="listrealizado" :columns="columns2" row-key="name" >
@@ -71,19 +77,19 @@ export default {
             detalles:[],
             fecha:moment().format("YYYY-MM-DD"),
             columns:[
-                {name:'op',label:'op',field:'op'},
-                {name:'actividad',label:'actividad',field:row=>row.actividad.nombre},
-                {name:'equipo',label:'equipo',field:row=>row.actividad.equipo.nombre},
-                {name:'tipo',label:'tipo',field:'tipo'},
-                {name:'estado',label:'estado',field:'estado'},
-                {name:'descripcion',label:'descripcion',field:'descripcion'},
+                {name:'op',label:'OP',field:'op'},
+                {name:'actividad',label:'ACTIVIDAD',field:row=>row.actividad.nombre},
+                {name:'equipo',label:'EQUIPO',field:row=>row.actividad.equipo.nombre},
+                {name:'tipo',label:'TIPO',field:'tipo'},
+                {name:'estado',label:'ESTADO',field:'estado'},
+                {name:'descripcion',label:'DESCRIPCION',field:'descripcion'},
             ],
             columns2:[
-                {name:'actividad',label:'actividad',field:row=>row.actividad.nombre},
-                {name:'equipo',label:'equipo',field:row=>row.actividad.equipo.nombre},
-                {name:'tipo',label:'tipo',field:'tipo'},
-                {name:'estado',label:'estado',field:'estado'},
-                {name:'descripcion',label:'descripcion',field:'descripcion'},
+                {name:'actividad',label:'ACTIVIDAD',field:row=>row.actividad.nombre},
+                {name:'equipo',label:'EQUIPO',field:row=>row.actividad.equipo.nombre},
+                {name:'tipo',label:'TIPO',field:'tipo'},
+                {name:'estado',label:'ESTADO',field:'estado'},
+                {name:'descripcion',label:'DESCRIPCION',field:'descripcion'},
             ],
             colList:[
             {name:'op',label:'op',field:'op'},
@@ -115,10 +121,29 @@ export default {
             if(det)
                 {
                     det.cantidad+=this.cantidad
+                    if(det.cantidad > this.material.cantidad)
+                    {
+                        this.$q.notify({
+                            message: 'No existe Suficiente material.',
+                            color: 'red',
+                            icon:'info'
+                            })
+                        return false
+                    }
                 }
             else{
-            this.material.cantidad=this.cantidad
-            this.detalles.push(this.material)}
+                if(this.cantidad > this.material.cantidad)
+                    {
+                        this.$q.notify({
+                            message: 'No existe Suficiente material.',
+                            color: 'red',
+                            icon:'info'
+                            })
+                        return false
+                    }
+                this.material.cantidad=this.cantidad
+                this.detalles.push(this.material)
+            }
         },
         eliminar(p){
             console.log(p)
@@ -158,7 +183,7 @@ export default {
 
         },
         getRev(){
-            this.$api.get('listAvance/'+this.fecha).then(res=>{
+            this.$api.post('listAvance',{ini:this.ini,fin:this.fin,tipo:this.tipo}).then(res=>{
                 console.log(res.data)
                 this.listrealizado=res.data
             })
