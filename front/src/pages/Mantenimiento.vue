@@ -13,14 +13,18 @@
         </q-table>
 
         <div class="row">
-            <div class="col-3  q-pa-xs"><q-input square outlined v-model="text" type='date' label="ini" dense /></div>
-            <div class="col-3  q-pa-xs"><q-input square outlined v-model="text" type='date' label="fin" dense /></div>
-            <div class="col-3  q-pa-xs"><q-select square outlined v-model="model" :options="['TODO','PREDICTIVO','PREVENTIVO','CORRECTIVO']" label="tipo" dense/></div>
+            <div class="col-3  q-pa-xs"><q-input square outlined v-model="ini" type='date' label="ini" dense /></div>
+            <div class="col-3  q-pa-xs"><q-input square outlined v-model="fin" type='date' label="fin" dense /></div>
+            <div class="col-3  q-pa-xs"><q-select square outlined v-model="tipo" :options="['TODO','PREDICTIVO','PREVENTIVO','CORRECTIVO']" label="tipo" dense/></div>
+            <div class="col-3 q-pa-xs"> <q-btn color="info"  icon="search" @click="getRev"/>   </div>
         </div>
-        <div class="col-6 q-pa-xs"> <q-btn color="info"  icon="search" @click="getRev"/>   </div>
 
         <q-table title="Revision Realizada" :rows="listrealizado" :columns="columns2" row-key="name" >
-
+            <template v-slot:body-cell-op="props">
+                <q-td keys="op" :props="props">
+                     <q-btn flat color="info" icon="print" dense @click="impresion(props.row)"  />
+                </q-td>
+              </template>
         </q-table>
         <q-dialog v-model="dialogReg">
             <q-card style="width: 700px; max-width: 80vw;">
@@ -56,15 +60,18 @@
                 </q-card-actions>
             </q-card>
         </q-dialog>
-
+        <div id="myelement" class="hidden"></div>
     </q-page>
 </template>
 <script>
 import moment from "moment"
+import { Printd } from 'printd'
+
 export default {
     name:'MantPage',
     data() {
         return {
+            tipo:'TODO',
             listrealizado:[],
             cantidad:1,
             dialogReg:false,
@@ -76,6 +83,8 @@ export default {
             listado:[],
             detalles:[],
             fecha:moment().format("YYYY-MM-DD"),
+            ini:moment().format("YYYY-MM-DD"),
+            fin:moment().format("YYYY-MM-DD"),
             columns:[
                 {name:'op',label:'OP',field:'op'},
                 {name:'actividad',label:'ACTIVIDAD',field:row=>row.actividad.nombre},
@@ -85,6 +94,7 @@ export default {
                 {name:'descripcion',label:'DESCRIPCION',field:'descripcion'},
             ],
             columns2:[
+                {name:'op',label:'OP',field:'op'},
                 {name:'actividad',label:'ACTIVIDAD',field:row=>row.actividad.nombre},
                 {name:'equipo',label:'EQUIPO',field:row=>row.actividad.equipo.nombre},
                 {name:'tipo',label:'TIPO',field:'tipo'},
@@ -106,6 +116,38 @@ export default {
         this.getInv()
     },
     methods:{
+        impresion(pr){
+            console.log(pr)
+            let contenido=''
+            /*pr.detalle.forEach(r => {
+            contenido+='<tr><td>'+r.nombre+'</td><td>'+r.cantidad+'</td><td>'+r.descrip+'</td></tr>'
+                
+            });*/
+            let cadena=`<style>
+             .titulo{ font-size: 18px;
+                      font-weight: bold;
+                      text-align:center;
+             }
+             .tab1{
+             width: 100%;
+             border-collapse: collapse;            
+             }
+             .tab1 th{
+              border: 1px solid;
+             }
+            </style>
+            <div>
+                 <div class='titulo'>REPORTE DE MANTENIMIENTO REALIZADO `+pr.tipo+` </div>
+                 <table class='tab1'>
+                    <tr><th>Material</th><th>Cantidad</th><th>Descrip</th></tr>
+                    
+                </table>
+            </div>
+            `
+            document.getElementById('myelement').innerHTML = cadena
+            const d = new Printd()
+            d.print(document.getElementById('myelement'))
+        },
         registrar(){
             this.dato.detalles=this.detalles
             this.$api.post('regRevision',this.dato).then(res =>{
