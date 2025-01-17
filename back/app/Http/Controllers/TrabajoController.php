@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTrabajoRequest;
 use App\Http\Requests\UpdateTrabajoRequest;
 use App\Models\Activity;
 use App\Models\Detalle;
+use App\Models\DetalleTrabajo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -30,13 +31,13 @@ class TrabajoController extends Controller
 
     public function listAvance(Request $request){
         if($request->tipo=='TODO'){
-        return Trabajo::with('actividad')->where('estado','<>','ABIERTA')
+        return Trabajo::with('actividad')->with('detalletrabajo')->where('estado','<>','ABIERTA')
         ->whereDate('creacion','>=',$request->ini)
         ->whereDate('creacion','<=',$request->fin)
         ->get();
         }
         else{
-            return Trabajo::with('actividad')->where('estado','<>','ABIERTA')
+            return Trabajo::with('actividad')->with('detalletrabajo')->where('estado','<>','ABIERTA')
             ->where('tipo',$request->tipo)
             ->whereDate('creacion','>=',$request->ini)
             ->whereDate('creacion','<=',$request->fin)
@@ -137,7 +138,7 @@ class TrabajoController extends Controller
 
         foreach ($request->detalles as  $value) {
             # code...
-            $detalle=new Detalle();
+            $detalle=new DetalleTrabajo();
             $detalle->cantidad=$value['cantidad'];
             $detalle->trabajo_id=$trabajo->id;
             $detalle->inventario_id=$value['id'];

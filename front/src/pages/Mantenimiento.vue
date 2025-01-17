@@ -119,10 +119,12 @@ export default {
         impresion(pr){
             console.log(pr)
             let contenido=''
-            /*pr.detalle.forEach(r => {
-            contenido+='<tr><td>'+r.nombre+'</td><td>'+r.cantidad+'</td><td>'+r.descrip+'</td></tr>'
+            let num=1
+            pr.detalletrabajo.forEach(r => {
+            contenido+='<tr><td>'+num+'</td><td>'+r.inventario.nombre+'</td><td>'+r.cantidad+'</td></tr>'
+            num++
                 
-            });*/
+            });
             let cadena=`<style>
              .titulo{ font-size: 18px;
                       font-weight: bold;
@@ -139,7 +141,7 @@ export default {
             <div>
                  <div class='titulo'>REPORTE DE MANTENIMIENTO REALIZADO `+pr.tipo+` </div>
                  <table class='tab1'>
-                    <tr><th>Material</th><th>Cantidad</th><th>Descrip</th></tr>
+                    <tr><th>N</th><th>Material</th><th>Cantidad</th></tr>  `+contenido+`
                     
                 </table>
             </div>

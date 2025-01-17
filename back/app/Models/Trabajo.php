@@ -28,7 +28,7 @@ class Trabajo extends Model
         return $this->belongsTo(Activity::class)->with('equipo');
     }
 
-    public function detalle(){
-        return $this->belongsToMany(Detalle::class)->withPivot('cantidad'); 
+    public function detalletrabajo(){
+        return $this->hasMany(DetalleTrabajo::class)->with('inventario'); 
     }
 }
