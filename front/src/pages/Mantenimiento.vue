@@ -16,7 +16,9 @@
             <div class="col-3  q-pa-xs"><q-input square outlined v-model="ini" type='date' label="ini" dense /></div>
             <div class="col-3  q-pa-xs"><q-input square outlined v-model="fin" type='date' label="fin" dense /></div>
             <div class="col-3  q-pa-xs"><q-select square outlined v-model="tipo" :options="['TODO','PREDICTIVO','PREVENTIVO','CORRECTIVO']" label="tipo" dense/></div>
-            <div class="col-3 q-pa-xs"> <q-btn color="info"  icon="search" @click="getRev"/>   </div>
+            <div class="col-1 q-pa-xs"> <q-btn color="info"  icon="search" @click="getRev"/>   </div>
+            <div class="col-1 q-pa-xs"> <q-btn color="indigo"  icon="bar_chart" @click="getChart"/>
+            </div>
         </div>
 
         <q-table title="Revision Realizada" :rows="listrealizado" :columns="columns2" row-key="name" >
@@ -60,18 +62,32 @@
                 </q-card-actions>
             </q-card>
         </q-dialog>
+        <q-card class="q-pa-md">
+            <q-card-section>
+                <h4>Gráfico y Datos de Registros</h4>
+                <!-- Gráfico de barras -->
+                <canvas id="bar-chart"  width="400" height="300"></canvas>
+                <pre>{{chartData}}</pre>
+            </q-card-section>
+          </q-card>
         <div id="myelement" class="hidden"></div>
     </q-page>
 </template>
 <script>
-import moment from "moment"
+import moment from "moment";
+import { defineComponent } from 'vue';
+
 import { Printd } from 'printd'
+import Chart from 'chart.js/auto';
+
 
 export default {
     name:'MantPage',
+
     data() {
         return {
             tipo:'TODO',
+            chartData:null,
             listrealizado:[],
             cantidad:1,
             dialogReg:false,
@@ -82,6 +98,7 @@ export default {
             dato:{},
             listado:[],
             detalles:[],
+            datos:[],
             fecha:moment().format("YYYY-MM-DD"),
             ini:moment().format("YYYY-MM-DD"),
             fin:moment().format("YYYY-MM-DD"),
@@ -105,7 +122,10 @@ export default {
             {name:'op',label:'op',field:'op'},
             {name:'cantidad',label:'cantidad',field:'cantidad'},
             {name:'nombre',label:'nombre',field:'nombre'},
-            ]
+            ],
+            total:[],
+            realizado:[],
+            titulo:[]
 
 
         }
@@ -114,8 +134,72 @@ export default {
         this.getplan()
         this.getRev()
         this.getInv()
+        this.getChart()
     },
+ 
     methods:{
+        async getChart() {
+        this.total = [];
+        this.realizado = [];
+        this.titulo = [];
+
+        await this.$api.post('estadistica', { ini: this.ini, fin: this.fin }).then(res => {
+            this.datos = res.data;
+            this.datos.forEach(r => {
+                this.total.push(r.total);
+                this.realizado.push(r.realizado);
+                this.titulo.push(r.fecha);
+            });
+
+            // Si el gráfico ya existe, actualiza los datos
+            if (this.chartInstance) {
+                this.chartInstance.data.labels = this.titulo;
+                this.chartInstance.data.datasets[0].data = this.total;
+                this.chartInstance.data.datasets[1].data = this.realizado;
+                this.chartInstance.update();
+            } else {
+                // Si no existe, crea el gráfico
+                this.createChart('bar-chart');
+            }
+        });
+    },
+    createChart(chartId) {
+        const ctx = document.getElementById(chartId);
+        this.chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: this.titulo,
+                datasets: [
+                    {
+                        label: 'Total Mtto',
+                        backgroundColor: 'blue',
+                        data: this.total
+                    },
+                    {
+                        label: 'Total Realizado',
+                        backgroundColor: 'green',
+                        data: this.realizado
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true
+                    },
+                    title: {
+                        display: true,
+                        text: 'Mtto Programados y Realizados'
+                    }
+                }
+            }
+        });
+    },
+    beforeUnmount() {
+            if (this.chartInstance) {
+                this.chartInstance.destroy();
+            }
+        },
         impresion(pr){
             console.log(pr)
             let contenido=''
@@ -233,6 +317,20 @@ export default {
             })
 
         }
-    }
+    },
+    computed: {
+
+
+}
 }
 </script>
+<style scoped>
+.q-card {
+  max-width: 900px;
+  margin: 0 auto;
+}
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+</style>

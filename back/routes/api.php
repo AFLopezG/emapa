@@ -27,8 +27,11 @@ Route::get('listCrono',[App\Http\Controllers\TrabajoController::class,'listCrono
 Route::get('listReg',[App\Http\Controllers\ActivityController::class,'listReg']);
 Route::get('listPlan/{fecha}',[App\Http\Controllers\TrabajoController::class,'listPlan']);
 Route::post('listAvance',[App\Http\Controllers\TrabajoController::class,'listAvance']);
+Route::get('listEqTip',[App\Http\Controllers\EquipoController::class,'listEqTip']);
 
 Route::post('regRevision',[App\Http\Controllers\TrabajoController::class,'regRevision']);
+Route::get('filtroEqTip/{ubicacion}',[App\Http\Controllers\EquipoController::class,'filtroEqTip']);
+Route::post('estadistica',[App\Http\Controllers\TrabajoController::class,'estadistica']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

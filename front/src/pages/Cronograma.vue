@@ -43,7 +43,7 @@
                    <div class="row">
                     <div class="col-6 q-pa-xs"><b>EQUIPO: </b> {{trabajo2.actividad.equipo.nombre}}</div>
                     <div class="col-6 q-pa-xs"><b>ACTIVIDAD: </b> {{trabajo2.actividad.nombre}}</div>
-                    <div class="col-6 q-pa-xs"><q-input dense square outlined v-model="trabajo2.creacion" type="date" label="Fecha Inicio"  required/></div>
+                    <div class="col-6 q-pa-xs"><q-input dense square outlined v-model="trabajo2.creacion" type="date" label="Fecha Inicio"  required v-bind:min="minFecha"/></div>
                     <div class="col-6 q-pa-xs"><q-select dense square outlined v-model="trabajo2.tipo" :options="tipo" label="Tipo" v required/></div>
                     <div class="col-12 q-pa-xs"><q-input dense square outlined v-model="trabajo2.descripcion" label="Descripcion" /></div>
                    </div>

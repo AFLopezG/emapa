@@ -10,6 +10,7 @@ use App\Models\Detalle;
 use App\Models\DetalleTrabajo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TrabajoController extends Controller
 {
@@ -43,6 +44,11 @@ class TrabajoController extends Controller
             ->whereDate('creacion','<=',$request->fin)
             ->get();
         }
+    }
+
+    public function estadistica(Request $request){
+        return DB::SELECT("SELECT  DATE(creacion) AS fecha, COUNT(*) AS total,  SUM(estado = 'FINALIZADA') AS finalizada FROM trabajos 
+            WHERE creacion BETWEEN '$request->ini' AND '$request->fin' GROUP BY  DATE(creacion) ORDER BY creacion ASC;  ");
     }
     /**
      * Show the form for creating a new resource.

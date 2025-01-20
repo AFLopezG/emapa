@@ -21,6 +21,14 @@ class EquipoController extends Controller
         return Equipo::where('estado','<>','FUERA DE SERVICIO')->get();
     }
 
+    public function listEqTip(){
+        return Equipo::select('ubicacion')->where('estado','<>','FUERA DE SERVICIO')->distinct()->get();
+    }
+
+    public function filtroEqTip($ubicacion){
+        return Equipo::where('ubicacion',$ubicacion)->where('estado','<>','FUERA DE SERVICIO')->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      */

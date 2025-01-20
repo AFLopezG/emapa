@@ -45,8 +45,12 @@
 </q-form>
 
     </q-card>
-    </q-dialog>
-    
+    </q-dialog><br>
+    <div class="row">
+        <div class="col-6"><q-select dense outlined v-model="place" :options="lugares" label="Ubicacion" option-label="ubicacion"/></div>
+        <div class="col-6"> <q-btn color="info" icon="print"  @click="impresion"/>
+        </div>
+    </div>
     </q-page>
 </template>
 <script>
@@ -58,6 +62,8 @@
         filter:'',
         equipo:{},
         listado:[],
+        lugares:[],
+        place:{ubicacion:''},
         columns:[
             {label:'OP',name:'op',field:'op'},
             {label:'CODIGO',name:'codigo',field:'codigo'},
@@ -70,8 +76,23 @@
   },
   created() {
         this.getEquip()
+        this.getPlace()
     },
     methods: {
+        impresion(){
+            if(this.place.ubicacion=='')
+            return false
+            this.$api.get('filtroEqTip/'+this.place.ubicacion).then(res =>{
+                console.log(res.data)
+            })
+  
+        },  
+        getPlace(){
+            this.$api.get('listEqTip').then(res =>{
+                console.log(res.data)
+                this.lugares=res.data
+            })                
+        },
         modificar(r){
             this.equipo=r
             this.dialogReg=true
