@@ -69,7 +69,7 @@ class TrabajoController extends Controller
         $finAnio = new \DateTime($fechaActual->format('Y') . '-12-31'); // Fin del año
         $intervalo = new \DateInterval('P' . $actividad->dias . 'D'); // Intervalo de días
 
-        if($request->tipo=='PREVENTIVO' || $request->tipo=='CORRECTIVO'){
+        if($request->tipo=='PREDICTIVO' || $request->tipo=='CORRECTIVO'){
             $trabajo = new Trabajo();
             $trabajo->creacion = $request->creacion; // Convertir la fecha a formato string
             $trabajo->descripcion = $request->descripcion;
